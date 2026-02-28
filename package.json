@@ -5,9 +5,9 @@
   "main": "api/index.ts",
   "type": "module",
   "scripts": {
-    "start": "node api/index.js",
-    "build": "tsc"
-  },
+  "build": "tsc",
+  "start": "node api/index.js"
+},
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
