@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  homes     Home[]     // Un usuario puede tener varias casas
+  logs      AuditLog[] 
+}
+
+model Home {
+  id        Int      @id @default(autoincrement())
+  name      String   // Ejemplo: "Casa de la Playa"
+  address   String?  // Ejemplo: "Calle 123, Talca"
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rooms     Room[]   // Una casa tiene varias estancias
+}
+
+model Room {
+  id        Int      @id @default(autoincrement())
+  name      String   // Ejemplo: "Cocina", "Habitación Principal"
+  type      String   // Para iconos (ej: "KITCHEN", "BEDROOM", "LIVING")
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  homeId    Int
+  home      Home     @relation(fields: [homeId], references: [id], onDelete: Cascade)
+  devices   Device[] // Los dispositivos ahora pertenecen a una estancia
+}
+
+model Device {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      String   // LIGHT, AC, THERMOSTAT, etc.
+  status    Boolean  @default(false)
+  energy    Float    @default(0.0)
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  roomId    Int
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  adminName String
+  action    String   
+  targetId  Int?     
+  details   String?  
+  createdAt DateTime @default(now())
+
+  admin     User     @relation(fields: [adminId], references: [id])
+}
