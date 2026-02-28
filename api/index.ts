@@ -1,22 +1,23 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+
+// Corregido: Se añade '/backend' porque según tu árbol de carpetas, 
+// 'src' está dentro de 'backend'
 import authRoutes from './src/routes/authRoutes';
 import userRoutes from './src/routes/userRoutes';
 import adminRoutes from './src/routes/adminRoutes';
-
 const app = express();
 
 // --- MIDDLEWARES GLOBALES ---
-// Modificado para aceptar múltiples dominios de Vercel y Localhost
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
       "https://smart-home-nine-gamma.vercel.app",
-      "http://localhost:5173", // Para desarrollo local con Vite
+      "http://localhost:5173",
       "http://localhost:3000"
     ];
-    // Permite el origen si está en la lista o si es un subdominio de vercel.app
+    // Permite cualquier subdominio de Vercel para evitar errores en Previews
     if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
       callback(null, true);
     } else {
@@ -35,12 +36,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 
-// --- TEST DE SALUD DEL SISTEMA ---
+// --- TEST DE SALUD ---
 app.get('/api/test', (req: Request, res: Response) => {
   res.json({ 
     status: "online",
-    message: "Core Systems Operational - CORS Fixed",
-    timestamp: new Date().toISOString()
+    message: "Core Systems Operational - Path Fixed",
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV
   });
 });
 
@@ -52,5 +54,4 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-// --- EXPORTACIÓN PARA VERCEL ---
 export default app;
