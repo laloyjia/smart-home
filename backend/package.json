@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "db:push": "prisma db push",
-    "generate": "prisma generate"
-  },
+    "generate": "prisma generate",
+     "build": "vite build"
+},
   "dependencies": {
     "@prisma/client": "^6.19.2",
     "bcryptjs": "^2.4.3",
