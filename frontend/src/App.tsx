@@ -3,7 +3,7 @@ import { Sidebar } from "./components/layout/Sidebar";
 import { DashboardView } from "./components/dashboard/DashboardView";
 import { UserManagement } from "./components/users/UserManagement";
 import { ControlPanel } from "./components/control-panel/ControlPanel";
-import { EventLogs } from "./components/logs/EventLogs";
+import { EventLogs } from "./components/logs/EventLogs.tsx";
 import { Login } from "./components/layout/Login";
 import api from "./api/axios";
 
